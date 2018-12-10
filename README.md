@@ -1,6 +1,6 @@
 ---
 ---
-title: "BAHCS-10 Prelim Results"
+title: "Health Capital Scale Percentiles"
 output: html_document
 ---
 
@@ -115,5 +115,32 @@ dim(HCS)
 describe.factor(HCS$FollowUpTimePoint, decr.order = TRUE)
 dim(HCS)
 
+### Now just get the ten questions that have evidence of holding together
+BAHCS_10 = HCS[c("ManageHealthProblems", "ManageMentalWellness", "ProvidersSimilarGoals", "NoSideEffectsConcerns", "NutritiousFoodFinancialBarrier", "HealthyHomeEnvironment", "TransportationAccess", "ParticipateSocialActivity", "FinancialNegativeAffectHealth", "EducationSatisfaction")]
+head(HCS)
+
+### Get rid of the rest of missing data
+### No additional missing data exepect what you already deleted
+HCS= na.omit(HCS)
+sum(is.na(HCS))
+#### Create a total score
+BAHCS_10Total = apply(BAHCS_10, 1, sum)
+
+
+###Now create the full HCS scale total score
+
+HCS$StateID = NULL 
+HCS$AvatarClient_ID = NULL
+HCS$FollowUpTimePoint = NULL
+HCSTotal = apply(HCS, 1, sum)
+
 ```
 Create percentiles
+```{r}
+quantile(BAHCS_10Total, c(.25, .5, .75))
+quantile(HCSTotal, c(.25, .5, .75))
+```
+
+
+
+
